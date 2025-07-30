@@ -12,3 +12,12 @@ The conversion took Claude Code about 8 hours to complete. This includes the suc
 
 ## Running the code
 See jdemetra_py/README.md
+
+## All prompts issued to Claude Code
+The complete list of prompts issued to Clause Code is listed below:
+
+> think hard and create a plan to convert the existing codebase from Java to Python. Save this plan under migration_plan.md
+
+> Go ahead and implement @migration_plan.md 
+
+> Run all tests and make sure there are no failures. Save to test results to TEST_SUMMARY.md
