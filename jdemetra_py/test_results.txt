@@ -1,0 +1,85 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.4, pytest-8.4.1, pluggy-1.6.0 -- /Users/duc/projects/claude/jdplus-main/jdemetra_py/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/duc/projects/claude/jdplus-main/jdemetra_py
+configfile: pyproject.toml
+plugins: cov-6.2.1
+collecting ... collected 69 items
+
+tests/test_arima.py::TestArimaModel::test_order_creation PASSED          [  1%]
+tests/test_arima.py::TestArimaModel::test_model_creation PASSED          [  2%]
+tests/test_arima.py::TestArimaModel::test_polynomials PASSED             [  4%]
+tests/test_arima.py::TestArimaModel::test_stationarity PASSED            [  5%]
+tests/test_arima.py::TestArimaModel::test_simulation PASSED              [  7%]
+tests/test_arima.py::TestArimaEstimation::test_basic_estimation PASSED   [  8%]
+tests/test_arima.py::TestArimaEstimation::test_airline_data PASSED       [ 10%]
+tests/test_arima.py::TestArimaEstimation::test_information_criteria PASSED [ 11%]
+tests/test_arima.py::TestSarimaModel::test_sarima_order PASSED           [ 13%]
+tests/test_arima.py::TestSarimaModel::test_sarima_model PASSED           [ 14%]
+tests/test_arima.py::TestArimaForecasting::test_basic_forecast PASSED    [ 15%]
+tests/test_arima.py::TestArimaForecasting::test_forecast_to_tsdata PASSED [ 17%]
+tests/test_arima.py::TestArimaForecasting::test_simulation PASSED        [ 18%]
+tests/test_math.py::TestFastMatrix::test_creation PASSED                 [ 20%]
+tests/test_math.py::TestFastMatrix::test_indexing PASSED                 [ 21%]
+tests/test_math.py::TestFastMatrix::test_column_row_access PASSED        [ 23%]
+tests/test_math.py::TestFastMatrix::test_arithmetic PASSED               [ 24%]
+tests/test_math.py::TestFastMatrix::test_matrix_properties PASSED        [ 26%]
+tests/test_math.py::TestFastMatrix::test_norms PASSED                    [ 27%]
+tests/test_math.py::TestDataBlock::test_creation PASSED                  [ 28%]
+tests/test_math.py::TestDataBlock::test_operations PASSED                [ 30%]
+tests/test_math.py::TestDataBlock::test_vector_operations PASSED         [ 31%]
+tests/test_math.py::TestPolynomial::test_creation PASSED                 [ 33%]
+tests/test_math.py::TestPolynomial::test_evaluation PASSED               [ 34%]
+tests/test_math.py::TestPolynomial::test_arithmetic PASSED               [ 36%]
+tests/test_math.py::TestPolynomial::test_division PASSED                 [ 37%]
+tests/test_math.py::TestPolynomial::test_calculus PASSED                 [ 39%]
+tests/test_math.py::TestPolynomial::test_roots PASSED                    [ 40%]
+tests/test_math.py::TestLinearAlgebra::test_qr_decomposition PASSED      [ 42%]
+tests/test_math.py::TestLinearAlgebra::test_svd PASSED                   [ 43%]
+tests/test_math.py::TestLinearAlgebra::test_cholesky PASSED              [ 44%]
+tests/test_sa.py::TestDecomposition::test_component_info PASSED          [ 46%]
+tests/test_sa.py::TestDecomposition::test_decomposition_creation PASSED  [ 47%]
+tests/test_sa.py::TestTramoSeatsSpec::test_default_spec PASSED           [ 49%]
+tests/test_sa.py::TestTramoSeatsSpec::test_predefined_specs PASSED       [ 50%]
+tests/test_sa.py::TestTramoSeatsSpec::test_spec_serialization PASSED     [ 52%]
+tests/test_sa.py::TestTramoSeatsProcessing::test_processor_creation PASSED [ 53%]
+tests/test_sa.py::TestTramoSeatsProcessing::test_specification_validation PASSED [ 55%]
+tests/test_sa.py::TestDiagnostics::test_m_statistics PASSED              [ 56%]
+tests/test_sa.py::TestDiagnostics::test_seasonality_tests PASSED         [ 57%]
+tests/test_sa.py::TestBenchmarking::test_cholette_benchmarking PASSED    [ 59%]
+tests/test_sa.py::TestBenchmarking::test_denton_benchmarking PASSED      [ 60%]
+tests/test_stats.py::TestDistributions::test_normal PASSED               [ 62%]
+tests/test_stats.py::TestDistributions::test_t_distribution PASSED       [ 63%]
+tests/test_stats.py::TestDistributions::test_chi2 PASSED                 [ 65%]
+tests/test_stats.py::TestDistributions::test_f_distribution PASSED       [ 66%]
+tests/test_stats.py::TestStatisticalTests::test_ljung_box PASSED         [ 68%]
+tests/test_stats.py::TestStatisticalTests::test_box_pierce PASSED        [ 69%]
+tests/test_stats.py::TestStatisticalTests::test_jarque_bera PASSED       [ 71%]
+tests/test_stats.py::TestStatisticalTests::test_skewness PASSED          [ 72%]
+tests/test_stats.py::TestStatisticalTests::test_kurtosis PASSED          [ 73%]
+tests/test_stats.py::TestDescriptiveStatistics::test_basic_stats PASSED  [ 75%]
+tests/test_stats.py::TestDescriptiveStatistics::test_quartiles PASSED    [ 76%]
+tests/test_stats.py::TestDescriptiveStatistics::test_higher_moments PASSED [ 78%]
+tests/test_stats.py::TestDescriptiveStatistics::test_nan_handling PASSED [ 79%]
+tests/test_stats.py::TestDescriptiveStatistics::test_derived_stats PASSED [ 81%]
+tests/test_timeseries.py::TestTsPeriod::test_arithmetic PASSED           [ 82%]
+tests/test_timeseries.py::TestTsPeriod::test_creation PASSED             [ 84%]
+tests/test_timeseries.py::TestTsPeriod::test_date_conversion PASSED      [ 85%]
+tests/test_timeseries.py::TestTsPeriod::test_display PASSED              [ 86%]
+tests/test_timeseries.py::TestTsDomain::test_contains PASSED             [ 88%]
+tests/test_timeseries.py::TestTsDomain::test_creation PASSED             [ 89%]
+tests/test_timeseries.py::TestTsDomain::test_range PASSED                [ 91%]
+tests/test_timeseries.py::TestTsData::test_creation PASSED               [ 92%]
+tests/test_timeseries.py::TestTsData::test_indexing PASSED               [ 94%]
+tests/test_timeseries.py::TestTsData::test_operations PASSED             [ 95%]
+tests/test_timeseries.py::TestTsData::test_statistics PASSED             [ 97%]
+tests/test_timeseries.py::TestTsData::test_window_operations PASSED      [ 98%]
+tests/test_timeseries.py::TestIntegration::test_pandas_integration PASSED [100%]
+
+=============================== warnings summary ===============================
+venv/lib/python3.12/site-packages/_pytest/config/__init__.py:1533
+  /Users/duc/projects/claude/jdplus-main/jdemetra_py/venv/lib/python3.12/site-packages/_pytest/config/__init__.py:1533: PytestConfigWarning: No files were found in testpaths; consider removing or adjusting your testpaths configuration. Searching recursively from the current directory instead.
+    self.args, self.args_source = self._decide_args(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 69 passed, 1 warning in 0.86s =========================

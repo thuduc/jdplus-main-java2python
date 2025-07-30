@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eu.europa.ec.joinup.sat</groupId>
+        <artifactId>jdplus-main</artifactId>
+        <version>3.5.2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jdplus-main-cli</artifactId>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>${project.parent.artifactId} - ${project.artifactId}</description>
+    <url>${project.parent.url}</url>
+
+    <properties>
+        <picocli.version>4.7.7</picocli.version>
+    </properties>
+
+    <modules>
+        <module>jdplus-main-cli-design</module>
+        <module>jdplus-toolkit-cli-plugin</module>
+        <module>jdplus-sa-cli-plugin</module>
+        <module>jdplus-spreadsheet-cli-plugin</module>
+        <module>jdplus-sql-cli-plugin</module>
+        <module>jdplus-text-cli-plugin</module>
+        <module>jdplus-tramoseats-cli-plugin</module>
+        <module>jdplus-x13-cli-plugin</module>
+        <module>jdplus-main-cli-bin</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>info.picocli</groupId>
+                <artifactId>picocli</artifactId>
+                <version>${picocli.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Generates uber-jar file -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.6.0</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <filters>
+                            <filter>
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <exclude>**/module-info.class</exclude>
+                                    <exclude>META-INF/MANIFEST.MF</exclude>
+                                    <exclude>META-INF/LICENSE.txt</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                        <transformers>
+                            <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        </transformers>
+                        <shadedArtifactAttached>true</shadedArtifactAttached>
+                        <shadedClassifierName>uber</shadedClassifierName>
+                        <createDependencyReducedPom>false</createDependencyReducedPom>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!-- List runtime dependencies for tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>list-runtime-dependencies</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>runtime</includeScope>
+                            <outputFile>${project.build.testOutputDirectory}/runtime-dependencies.txt</outputFile>
+                            <outputScope>false</outputScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

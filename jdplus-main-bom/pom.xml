@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eu.europa.ec.joinup.sat</groupId>
+        <artifactId>jdplus-main</artifactId>
+        <version>3.5.2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jdplus-main-bom</artifactId>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>${project.parent.artifactId} - ${project.artifactId}</description>
+    <url>${project.parent.url}</url>
+
+    <properties>
+        <java.bundled.version>jdk-21.0.8+9</java.bundled.version>
+        <linux.java.bundled.version>${java.bundled.version}</linux.java.bundled.version>
+        <windows.java.bundled.version>${java.bundled.version}</windows.java.bundled.version>
+        <osx.java.bundled.version>${java.bundled.version}</osx.java.bundled.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>eu.europa.ec.joinup.sat</groupId>
+                <artifactId>jdplus-main-cli-bin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.europa.ec.joinup.sat</groupId>
+                <artifactId>jdplus-main-desktop-bin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.7.2</version>
+                <configuration>
+                    <flattenMode>bom</flattenMode>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Release binaries on GitHub -->
+        <!-- Note that all plugins are run on 'install' phase -->
+        <profile>
+            <id>full-release</id>
+            <properties>
+                <!-- defines the root folder of a jre archive -->
+                <!-- should be automated since there is always one root folder -->
+                <linux.dir>${linux.java.bundled.version}-jre</linux.dir>
+                <windows.dir>${windows.java.bundled.version}-jre</windows.dir>
+                <osx.dir>${osx.java.bundled.version}-jre</osx.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- Extract changelog -->
+                    <plugin>
+                        <groupId>com.github.nbbrd.heylogs</groupId>
+                        <artifactId>heylogs-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>extract-changelog</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>extract</goal>
+                                </goals>
+                                <configuration>
+                                    <inputFile>${project.parent.basedir}/CHANGELOG.md</inputFile>
+                                    <outputFile>${project.build.directory}/CHANGELOG.md</outputFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Gather binaries and JRE -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-binaries</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>eu.europa.ec.joinup.sat</groupId>
+                                            <artifactId>jdplus-main-cli-bin</artifactId>
+                                            <type>zip</type>
+                                            <destFileName>jwsacruncher-${project.version}.zip</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>eu.europa.ec.joinup.sat</groupId>
+                                            <artifactId>jdplus-main-desktop-bin</artifactId>
+                                            <type>zip</type>
+                                            <destFileName>jdemetra-${project.version}.zip</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jreleaser</groupId>
+                        <artifactId>jdks-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>download-jre</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>setup-disco</goal>
+                                </goals>
+                                <configuration>
+                                    <pkgs>
+                                        <pkg>
+                                            <name>jdk-windows-x86_64</name>
+                                            <distribution>temurin</distribution>
+                                            <platform>windows-x86_64</platform>
+                                            <version>${windows.java.bundled.version}</version>
+                                            <packageType>jre</packageType>
+                                            <archiveType>zip</archiveType>
+                                        </pkg>
+                                        <pkg>
+                                            <name>jdk-windows-aarch_64</name>
+                                            <distribution>temurin</distribution>
+                                            <platform>windows-aarch64</platform>
+                                            <version>${windows.java.bundled.version}</version>
+                                            <packageType>jre</packageType>
+                                            <archiveType>zip</archiveType>
+                                        </pkg>
+                                        <pkg>
+                                            <name>jdk-linux-x86_64</name>
+                                            <distribution>temurin</distribution>
+                                            <platform>linux-x86_64</platform>
+                                            <version>${linux.java.bundled.version}</version>
+                                            <packageType>jre</packageType>
+                                            <archiveType>tar.gz</archiveType>
+                                        </pkg>
+                                        <pkg>
+                                            <name>jdk-linux-aarch_64</name>
+                                            <distribution>temurin</distribution>
+                                            <platform>linux-aarch64</platform>
+                                            <version>${linux.java.bundled.version}</version>
+                                            <packageType>jre</packageType>
+                                            <archiveType>tar.gz</archiveType>
+                                        </pkg>
+                                        <pkg>
+                                            <name>jdk-osx-x86_64</name>
+                                            <distribution>temurin</distribution>
+                                            <platform>osx-x86_64</platform>
+                                            <version>${osx.java.bundled.version}</version>
+                                            <packageType>jre</packageType>
+                                            <archiveType>tar.gz</archiveType>
+                                        </pkg>
+                                        <pkg>
+                                            <name>jdk-osx-aarch_64</name>
+                                            <distribution>temurin</distribution>
+                                            <platform>osx-aarch64</platform>
+                                            <version>${osx.java.bundled.version}</version>
+                                            <packageType>jre</packageType>
+                                            <archiveType>tar.gz</archiveType>
+                                        </pkg>
+                                    </pkgs>
+                                    <unpack>false</unpack>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Create binaries bundled with JRE -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>pack-cli-binaries</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <macrodef name="bundle-cli">
+                                            <attribute name="platform"/>
+                                            <attribute name="extension"/>
+                                            <attribute name="dir"/>
+                                            <sequential>
+                                                <echo message="Bundling @{platform}" level="info"/>
+                                                <pathconvert property="jdk.@{platform}">
+                                                    <first>
+                                                        <fileset dir="${project.build.directory}/jdks/jdk-@{platform}"/>
+                                                    </first>
+                                                </pathconvert>
+                                                <ant antfile="${project.basedir}/src/antrun/bundle-appassembler.xml">
+                                                    <property name="x.bundleInput"
+                                                              value="${project.build.directory}/jwsacruncher-${project.version}.zip"/>
+                                                    <property name="x.bundleOutput"
+                                                              value="${project.build.directory}/jwsacruncher-standalone-${project.version}-@{platform}.zip"/>
+                                                    <property name="x.programId" value="jwsacruncher"/>
+                                                    <property name="x.baseDirectory"
+                                                              value="jwsacruncher-${project.version}"/>
+                                                    <property name="x.jdkArchive" value="${jdk.@{platform}}"/>
+                                                    <property name="x.jdkDirectory" value="@{dir}"/>
+                                                    <target name="bundle.@{extension}"/>
+                                                </ant>
+                                            </sequential>
+                                        </macrodef>
+
+                                        <parallel threadsPerProcessor="1">
+                                            <bundle-cli platform="windows-x86_64" extension="zip" dir="${windows.dir}"/>
+                                            <bundle-cli platform="windows-aarch_64" extension="zip" dir="${windows.dir}"/>
+                                            <bundle-cli platform="linux-x86_64" extension="tar.gz" dir="${linux.dir}"/>
+                                            <bundle-cli platform="linux-aarch_64" extension="tar.gz" dir="${linux.dir}"/>
+                                            <bundle-cli platform="osx-x86_64" extension="tar.gz"
+                                                        dir="${osx.dir}/Contents/Home"/>
+                                            <bundle-cli platform="osx-aarch_64" extension="tar.gz"
+                                                        dir="${osx.dir}/Contents/Home"/>
+                                        </parallel>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>pack-desktop-binaries</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <macrodef name="bundle-desktop">
+                                            <attribute name="platform"/>
+                                            <attribute name="extension"/>
+                                            <attribute name="dir"/>
+                                            <sequential>
+                                                <echo message="Bundling @{platform}" level="info"/>
+                                                <pathconvert property="jdk.@{platform}">
+                                                    <first>
+                                                        <fileset dir="${project.build.directory}/jdks/jdk-@{platform}"/>
+                                                    </first>
+                                                </pathconvert>
+                                                <ant antfile="${project.basedir}/src/antrun/bundle-netbeans.xml">
+                                                    <property name="x.bundleInput"
+                                                              value="${project.build.directory}/jdemetra-${project.version}.zip"/>
+                                                    <property name="x.bundleOutput"
+                                                              value="${project.build.directory}/jdemetra-standalone-${project.version}-@{platform}.zip"/>
+                                                    <property name="x.branding" value="nbdemetra"/>
+                                                    <property name="x.jdkArchive" value="${jdk.@{platform}}"/>
+                                                    <property name="x.jdkDirectory" value="@{dir}"/>
+                                                    <target name="bundle.@{extension}"/>
+                                                </ant>
+                                            </sequential>
+                                        </macrodef>
+
+                                        <parallel threadsPerProcessor="1">
+                                            <bundle-desktop platform="windows-x86_64" extension="zip" dir="${windows.dir}"/>
+                                            <bundle-desktop platform="windows-aarch_64" extension="zip" dir="${windows.dir}"/>
+                                            <bundle-desktop platform="linux-x86_64" extension="tar.gz"
+                                                            dir="${linux.dir}"/>
+                                            <bundle-desktop platform="linux-aarch_64" extension="tar.gz"
+                                                            dir="${linux.dir}"/>
+                                            <bundle-desktop platform="osx-x86_64" extension="tar.gz"
+                                                            dir="${osx.dir}/Contents/Home"/>
+                                            <bundle-desktop platform="osx-aarch_64" extension="tar.gz"
+                                                            dir="${osx.dir}/Contents/Home"/>
+                                        </parallel>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Release assets -->
+                    <plugin>
+                        <groupId>org.jreleaser</groupId>
+                        <artifactId>jreleaser-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>release-assets</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>full-release</goal>
+                                </goals>
+                                <configuration>
+                                    <jreleaser>
+                                        <release>
+                                            <github>
+                                                <skipTag>true</skipTag>
+                                                <changelog>
+                                                    <external>${project.build.directory}/CHANGELOG.md</external>
+                                                </changelog>
+                                            </github>
+                                        </release>
+                                        <signing>
+                                            <active>ALWAYS</active>
+                                            <!-- Fix default value -->
+                                            <armored>true</armored>
+                                        </signing>
+                                        <distributions>
+                                            <!-- Name is here ! -->
+                                            <jwsacruncher>
+                                                <type>JAVA_BINARY</type>
+                                                <artifacts>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jwsacruncher-${project.version}.zip
+                                                        </path>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jwsacruncher-standalone-${project.version}-windows-x86_64.zip
+                                                        </path>
+                                                        <platform>windows-x86_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jwsacruncher-standalone-${project.version}-linux-x86_64.zip
+                                                        </path>
+                                                        <platform>linux-x86_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jwsacruncher-standalone-${project.version}-linux-aarch_64.zip
+                                                        </path>
+                                                        <platform>linux-aarch_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jwsacruncher-standalone-${project.version}-osx-x86_64.zip
+                                                        </path>
+                                                        <platform>osx-x86_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jwsacruncher-standalone-${project.version}-osx-aarch_64.zip
+                                                        </path>
+                                                        <platform>osx-aarch_64</platform>
+                                                    </artifact>
+                                                </artifacts>
+                                            </jwsacruncher>
+                                            <!-- Name is here ! -->
+                                            <jdemetra>
+                                                <type>JAVA_BINARY</type>
+                                                <artifacts>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jdemetra-${project.version}.zip
+                                                        </path>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jdemetra-standalone-${project.version}-windows-x86_64.zip
+                                                        </path>
+                                                        <platform>windows-x86_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jdemetra-standalone-${project.version}-linux-x86_64.zip
+                                                        </path>
+                                                        <platform>linux-x86_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jdemetra-standalone-${project.version}-linux-aarch_64.zip
+                                                        </path>
+                                                        <platform>linux-aarch_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jdemetra-standalone-${project.version}-osx-x86_64.zip
+                                                        </path>
+                                                        <platform>osx-x86_64</platform>
+                                                    </artifact>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/jdemetra-standalone-${project.version}-osx-aarch_64.zip
+                                                        </path>
+                                                        <platform>osx-aarch_64</platform>
+                                                    </artifact>
+                                                </artifacts>
+                                            </jdemetra>
+                                        </distributions>
+                                    </jreleaser>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>check-compatibility</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.nbbrd.nbbrd-maven-tools</groupId>
+                        <artifactId>compatibility-maven-plugin</artifactId>
+                        <version>1.1.1</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check-downstream</goal>
+                                </goals>
+                                <configuration>
+                                    <source>${project.baseUri}/../</source>
+                                    <sourceBinding>eu.europa.ec.joinup.sat:jdplus*</sourceBinding>
+                                    <targets>
+                                        <target>https://github.com/jdemetra/jdplus-benchmarking</target>
+                                        <target>https://github.com/jdemetra/jdplus-incubator</target>
+                                        <target>https://github.com/jdemetra/jdplus-experimental</target>
+                                        <target>https://github.com/jdemetra/jdplus-revisions</target>
+                                        <target>https://github.com/jdemetra/jdplus-nowcasting</target>
+                                        <target>https://github.com/nbbrd/jdplus-sdmx</target>
+                                    </targets>
+                                    <targetLimits>1,1,1,1,1,1</targetLimits>
+                                    <logErrors>true</logErrors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

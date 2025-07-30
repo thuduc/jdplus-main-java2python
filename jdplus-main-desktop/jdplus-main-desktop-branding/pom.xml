@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.europa.ec.joinup.sat</groupId>
+        <artifactId>jdplus-main-desktop</artifactId>
+        <version>3.5.2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jdplus-main-desktop-branding</artifactId>
+    <packaging>nbm</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>${project.parent.artifactId} - ${project.artifactId}</description>
+    <url>${project.parent.url}</url>
+
+    <dependencies>
+        <!-- NetBeans Platform -->
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-api-annotations-common</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <!-- Copy and replace Maven variables in Bundle.properties file -->
+                    <execution>
+                        <id>generate-bundles</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>src/main/nbm-branding</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>core/core.jar/org/netbeans/core/startup/Bundle.properties</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
