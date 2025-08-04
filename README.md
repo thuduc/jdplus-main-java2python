@@ -15,13 +15,17 @@ The purpose of this proof of concept is to find out if an LLM can take an existi
 * The converted Python code resides under jdemetra_py/ directory
 * Successful passing of all unit and integration tests. See [jdemetra_py/TEST_SUMMARY.md](jdemetra_py/TEST_SUMMARY.md) for details.
 
+### PoC Assessment
+* See [POC_ASSESSMENT.md](POC_ASSESSMENT.md) for detailed assessment of the Java to Python conversion plan ([PYTHON_CONVERSION_PLAN.md](PYTHON_CONVERSION_PLAN.md)) and the conversion implementation.
+* We manually confirmed the core of these findings
+
 ### Running the code
 See [jdemetra_py/README.md](jdemetra_py/README.md)
 
 ## All prompts issued to Claude Code
 The complete list of prompts issued to Clause Code is listed below:
 
-> you're a Java and Python programming language expert. Analyze the existing Java codebase before coming up with a plan to convert it to Python. Save this plan under PYTHON_CONVERSION_PLAN.md. Think hard.
+> you're a Java and Python programming language expert. Analyze the existing Java codebase before coming up with a plan to convert only the jdplus-main-base module to Python. Save this plan under PYTHON_CONVERSION_PLAN.md. Think hard.
 
 > Go ahead and implement all tasks in @PYTHON_CONVERSION_PLAN.md. Make sure the converted Python code has comprehensive test coverage, via unit and integration tests.
 
