@@ -1,23 +1,28 @@
-# Proof-of-concept: Java to Python conversion using Claude Code
-JDemetra+ (Java tool for seasonal adjustment and time series analysis) source repo is located at https://github.com/jdemetra/jdplus-main
+## GenAI Proof of Concept: Java to Python conversion using Claude Code
+The purpose of this proof of concept is to find out if an LLM can take an existing complex Java codebase and convert it to Python. The project we will be using for this PoC is this JDemetra+ C++ ((Java tool for seasonal adjustment and time series analysis)): https://github.com/jdemetra/jdplus-main
 
-This POC is to evaluate Claude Code (an agentic coding tool from Anthropic: https://www.anthropic.com/claude-code) for its ability to convert a toolkit written in Java to Python.
+### LLM & AI Tool
+* LLM used: Claude Opus 4 (best coding LLM) - https://www.anthropic.com/claude/opus
+* AI tool used: Claude Code (best coding CLI due to its integration with Clause 4 LLMs) - https://www.anthropic.com/claude-code
 
-#### Conversion Process: 
-* Step 1 - use a reasoning LLM that's able to analyze an existing code repository, then put together a comprehensive migration plan for converting the entire project's codebase from Java to Python. We used Anthropic's Claude Opus 4 LLM for our reasoning LLM. We chose Opus 4 over OpenAI's ChatGPT o3 (advanded reasoning) and Google Gemini 2.5 Pro (reasoning) due to its advanced ability to analyze code. 
-* Step 2 - use this migration plan (see migration_plan.md) with Claude Code (together with Claude Opus 4 LLM, known as the most advanded model for agentic coding tasks) to implement all tasks in all phases defined in the migration plan. The migration plan includes requirements for comprehensive test coverage.
+### Conversion Process: 
+* Step 1 - use Claude Code (together with Opus 4 LLM) to analyze an existing code repository, then ask it to put together a comprehensive conversion plan for converting the entire codebase from Java to Python. 
+* Step 2 - ask Claude Code to use this conversion plan (see [PYTHON_CONVERSION_PLAN.md](PYTHON_CONVERSION_PLAN.md)) to implement all phases defined in the plan. Make sure the migration plan includes requirements for comprehensive test coverage of the converted code, via unit and integration tests.
 
-The conversion took Claude Code about 8 hours to complete. This includes the successful passing of all unit and integration tests. See jdemetra_py/TEST_SUMMARY.md for details. The converted python codebase resides under jdemetra_py folder.
+### PoC Results
+* The [PYTHON_CONVERSION_PLAN.md](PYTHON_CONVERSION_PLAN.md) specifies a migration timeline of 13+ months, to be done in 6 phases. The conversion took Claude Code over 8 hours to complete. 
+* The conversion effort by Claude Code did not perform a line-by-line conversion of the original Java code into Python. It analyzed the entire Java codebase before coming up with a new modular design, then scaffolded the entire project, before proceeding with the Java to Python conversion.
+* The converted Python code resides under jdemetra_py/ directory
+* Successful passing of all unit and integration tests. See [jdemetra_py/TEST_SUMMARY.md](jdemetra_py/TEST_SUMMARY.md) for details.
 
-
-## Running the code
-See jdemetra_py/README.md
+### Running the code
+See [jdemetra_py/README.md](jdemetra_py/README.md)
 
 ## All prompts issued to Claude Code
 The complete list of prompts issued to Clause Code is listed below:
 
-> think hard and create a plan to convert the existing codebase from Java to Python. Save this plan under migration_plan.md
+> you're a Java and Python programming language expert. Analyze the existing Java codebase before coming up with a plan to convert it to Python. Save this plan under PYTHON_CONVERSION_PLAN.md. Think hard.
 
-> Go ahead and implement @migration_plan.md 
+> Go ahead and implement all tasks in @PYTHON_CONVERSION_PLAN.md. Make sure the converted Python code has comprehensive test coverage, via unit and integration tests.
 
-> Run all tests and make sure there are no failures. Save to test results to TEST_SUMMARY.md
+> Run all tests of the converted Python code and save the test results to TEST_SUMMARY.md
