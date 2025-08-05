@@ -25,7 +25,7 @@ The purpose of this proof of concept is to find out if an LLM can take an existi
     * Idiomatic Python usage: Highly efficient usage of 'with' for managing resources, especially for creating and automatically cleaning up temporary directories and ensuring that files are automatically closed, even if errors occur while they are being processed. 
     Effective Use of the Standard Libraries in Python.
 
-    * Readability & safety: Provides user-friendly interface to powerful statistical capabilities of /Demetrat, while intelligently reusing all existing,
+    * Readability & safety: Provides user-friendly interface to powerful statistical capabilities of /Demetrat, while intelligently reusing all existing, validated core algorithms. This approach ensures stablitiy of the calculations and accessibility to the tools for us developers.
 
 
 ### Running the code
