@@ -18,14 +18,14 @@ The purpose of this proof of concept is to find out if an LLM can take an existi
 ### PoC Assessment
 * See [POC_ASSESSMENT.md](POC_ASSESSMENT.md) for detailed assessment of the Java to Python conversion plan ([PYTHON_CONVERSION_PLAN.md](PYTHON_CONVERSION_PLAN.md)) and the conversion implementation.
 * We manually confirmed the core of these findings
-    * Functional Completeness: Converted python code appears to be a complete and accurate port of the original Java application's functionality. Instead of a direct line-by-line port, the Model intelligently created a wrapper around the existing X-13-ARIMA-SEATS command-line executable. This is a very efficient approach as it takes advantage of the extremely well-known stability of the original C & Fortran code.
+    * **Functional Completeness**: Converted python code appears to be a complete and accurate port of the original Java application's functionality. Instead of a direct line-by-line port, the Model intelligently created a wrapper around the existing X-13-ARIMA-SEATS command-line executable. This is a very efficient approach as it takes advantage of the extremely well-known stability of the original C & Fortran code.
 
-    * Structural Fidelity: Very well-structured
+    * **Structural Fidelity**: Very well-structured
 
-    * Idiomatic Python usage: Highly efficient usage of 'with' for managing resources, especially for creating and automatically cleaning up temporary directories and ensuring that files are automatically closed, even if errors occur while they are being processed. 
+    * **Readability & safety**: Simple API, safe defaults like symmetry enforcement (SPD Matrix).: Highly efficient usage of 'with' for managing resources, especially for creating and automatically cleaning up temporary directories and ensuring that files are automatically closed, even if errors occur while they are being processed. 
     Effective Use of the Standard Libraries in Python.
 
-    * Readability & safety: Provides user-friendly interface to powerful statistical capabilities of /Demetrat, while intelligently reusing all existing, validated core algorithms. This approach ensures stablitiy of the calculations and accessibility to the tools for us developers.
+    * **Readability & safety**: Provides user-friendly interface to powerful statistical capabilities of /Demetrat, while intelligently reusing all existing, validated core algorithms. This approach ensures stablitiy of the calculations and accessibility to the tools for us developers.
 
 
 ### Running the code
